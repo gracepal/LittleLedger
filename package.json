@@ -1,0 +1,16 @@
+{
+  "name": "littleledger",
+  "version": "1.0.0",
+  "description": "> A log of all the little things 🐥",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com-me:gracepal/LittleLedger.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
