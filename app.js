@@ -28,13 +28,18 @@ const SCROLL_THRESHOLD = 300; // Define threshold for clarity
  * NEW HELPER FUNCTION: Re-attach necessary listeners
  */
 function attachSidebarListeners() {
-  // 1. Re-select the products link element (it was destroyed by innerHTML swap)
+  // Re-select the products link element (it was destroyed by innerHTML swap)
   const reAttachedProductsLink = document.getElementById('view-products-link');
+  const reAttachedHomeLink = document.getElementById('view-home-link'); // <-- NEW SELECTION
 
-  // 2. Attach the new listener (if the element exists)
+  // Attach the new listeners (if the elements exist)
   if (reAttachedProductsLink) {
-    // We ensure the link is active by attaching the listener to the newly created element
     reAttachedProductsLink.addEventListener('click', loadProductsView);
+  }
+
+  // Re-attach the Home listener
+  if (reAttachedHomeLink) {
+    reAttachedHomeLink.addEventListener('click', loadHomeView);
   }
 }
 
@@ -136,10 +141,10 @@ function getProductsPageHTML() {
 
 // Function to handle the initial view loading based on the URL hash
 function routePage() {
-  // 1. Get the hash (e.g., '#products' or '')
+  // Get the hash (e.g., '#products' or '')
   const hash = window.location.hash;
 
-  // 2. Load the appropriate view
+  // Load the appropriate view
   if (hash === '#products') {
     // Load the products page without changing the URL hash again (pass false)
     loadProductsView(false);
@@ -157,32 +162,27 @@ function loadHomeView(event) {
     window.location.hash = ''; // Clear the hash for the home page
   }
 
-  // 1. Get the content from the hidden template
+  // Get the content from the hidden template
   const homeContentHTML = homeTemplate.innerHTML;
 
-  // 2. Update the main content area with the home HTML
+  // Update the main content area with the home HTML
   mainContent.innerHTML = homeContentHTML;
 
-  // CRITICAL: Restore the sidebar to its original state (only <ul> links)
+  // Restore the sidebar to its original state (only <ul> links)
   // This recreates the 'See Products' link element.
   sidebarMenu.innerHTML = `
         <ul>
+            <li><a href="#" id="view-home-link">Home</a></li>
             <li><a href="#" id="view-products-link">See Products</a></li>
             <li><a href="#">Calendar</a></li>
             <li><a href="#">Log Event</a></li>
         </ul>
     `;
 
-  // CRITICAL: Re-attach the event listener to the NEW 'See Products' link element
+  // Re-attach the event listener to the NEW 'See Products' link element
   attachSidebarListeners();
 
-  // 3. Ensure the sidebar is closed
-  // REMOVED: sidebarMenu.classList.remove('open');
-  // REMOVED: mainWrapper.classList.remove('shifted');
-
-  // NOTE: The sidebar will now remain in its current open/closed state.
-
-  // 4. Scroll to the top
+  // Scroll to the top
   window.scrollTo(0, 0);
 }
 
@@ -194,12 +194,13 @@ function loadProductsView(event) {
     window.location.hash = '#products';
   }
 
-  // 1. Update the main content area with the new HTML
+  // Update the main content area with the new HTML
   mainContent.innerHTML = getProductsPageHTML();
 
   // Overwrite the sidebar content with the links PLUS the controls
   sidebarMenu.innerHTML = `
         <ul>
+            <li><a href="#" id="view-home-link">Home</a></li>
             <li><a href="#" id="view-products-link">See Products</a></li>
             <li><a href="#">Calendar</a></li>
             <li><a href="#">Log Event</a></li>
@@ -207,17 +208,10 @@ function loadProductsView(event) {
         ${getProductsSidebarControlsHTML()}
     `;
 
-  // 2. We must re-attach the listener to the 'See Products' link
+  // We must re-attach the listener to the 'See Products' link
   attachSidebarListeners();
 
-  // 3. Close the sidebar after navigation
-  // REMOVED: sidebarMenu.classList.remove('open');
-  // REMOVED: mainWrapper.classList.remove('shifted');
-
-  // NOTE: The sidebar will now remain in its current open/closed state.
-  // If it was open before the click, it stays open.
-
-  // 4. Scroll to the top of the page
+  // Scroll to the top of the page
   window.scrollTo(0, 0);
 }
 
@@ -244,17 +238,17 @@ function scrollToTop() {
  * EVENT LISTENERS
  */
 
-// --- 1. SIDEBAR TOGGLE (PUSH EFFECT) ---
+// --- SIDEBAR TOGGLE (PUSH EFFECT) ---
 
 menuToggleButton.addEventListener('click', function () {
-  // 1. Toggle the 'open' class on the sidebar (to slide it in)
+  // Toggle the 'open' class on the sidebar (to slide it in)
   sidebarMenu.classList.toggle('open');
 
-  // 2. Toggle the 'shifted' class on the main wrapper (to push content)
+  // Toggle the 'shifted' class on the main wrapper (to push content)
   mainWrapper.classList.toggle('shifted');
 });
 
-// --- 2. DROPDOWN TOGGLE (OVERLAY) ---
+// --- DROPDOWN TOGGLE (OVERLAY) ---
 
 userMenuToggleButton.addEventListener('click', function (event) {
   // Prevent the button click from bubbling up (important for overlays)
@@ -264,7 +258,7 @@ userMenuToggleButton.addEventListener('click', function (event) {
   userDropdown.classList.toggle('visible');
 });
 
-// --- 3. DROPDOWN CLOSE ON EXTERNAL CLICK ---
+// --- DROPDOWN CLOSE ON EXTERNAL CLICK ---
 
 // Close dropdown when clicking anywhere else (excluding the toggle button)
 document.addEventListener('click', function (event) {
@@ -277,11 +271,11 @@ document.addEventListener('click', function (event) {
   }
 });
 
-// --- 4. SCROLL TO TOP LISTENERS ---
+// --- SCROLL TO TOP LISTENERS ---
 window.addEventListener('scroll', toggleScrollButton);
 scrollButton.addEventListener('click', scrollToTop);
 
-// --- 5. VIEW SWITCHING LISTENERS (Initial Setup) ---
+// --- VIEW SWITCHING LISTENERS (Initial Setup) ---
 
 // Home button always exists, so attach its listener once
 viewHomeLink.addEventListener('click', loadHomeView);
@@ -291,3 +285,4 @@ viewHomeLink.addEventListener('click', loadHomeView);
 // Handle initial page load and browser history (back/forward)
 document.addEventListener('DOMContentLoaded', routePage);
 window.addEventListener('hashchange', routePage);
+viewHomeLink.addEventListener('click', loadHomeView);
