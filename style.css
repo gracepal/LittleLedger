@@ -1,5 +1,9 @@
 /* style.css */
 
+/* --------------------------------------------------
+   BASE & UTILITIES
+   -------------------------------------------------- */
+
 @import url('https://fonts.googleapis.com/css2?family=Alan+Sans:wght@300..900&display=swap');
 
 :root {
@@ -26,7 +30,9 @@ button {
   cursor: pointer;
 }
 
-/* --- NAVBAR & DROPDOWN STYLES --- */
+/* --------------------------------------------------
+   NAVBAR & DROPDOWN STYLES
+   -------------------------------------------------- */
 
 .navbar {
   display: flex;
@@ -42,13 +48,11 @@ button {
   height: 50px;
 }
 
-
 .left {
   display: flex;
   gap: 10px;
 }
 
-/* New: Container for the avatar and dropdown menu */
 .user-menu-container {
     position: relative; /* Anchor point for the absolute dropdown */
     display: flex;
@@ -60,7 +64,6 @@ button {
     position: absolute;
     top: 40px; /* Position below the avatar/name buttons */
     right: 0; /* Align to the right edge of the container */
-
     background-color: #fff;
     border: 1px solid #ddd;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
@@ -71,7 +74,7 @@ button {
     visibility: hidden;
     transform: translateY(-10px);
     transition: opacity 0.2s ease, transform 0.2s ease, visibility 0.2s;
-    z-index: 1000; /* High z-index to overlay everything */
+    z-index: 1000;
 }
 
 /* Dropdown Menu Open State */
@@ -104,8 +107,52 @@ button {
     margin: 5px 0;
 }
 
+/* --------------------------------------------------
+   SIDEBAR & MAIN LAYOUT STYLES
+   -------------------------------------------------- */
 
-/* --- MAIN CONTENT & SIDEBAR STYLES --- */
+/* Sidebar Styles */
+.sidebar {
+  position: fixed;
+  top: 50px;
+  left: 0;
+  width: 250px;
+  height: calc(100% - 50px);
+  overflow-y: auto; /* Enables scrolling for the entire sidebar content */
+  background-color: #fff;
+
+  transform: translateX(-100%);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+  z-index: 100;
+}
+
+/* Class that slides the sidebar into view */
+.sidebar.open {
+  transform: translateX(0);
+}
+
+.sidebar ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.sidebar li a {
+  display: block;
+  padding: 10px 15px;
+  text-decoration: none;
+  color: #333;
+}
+
+.sidebar li a:hover {
+  background-color: #eee;
+}
+
+/* Main Content Element */
+main {
+    padding: 0; /* Clear padding; the wrapper handles all spacing */
+}
 
 /* Main Content Wrapper (Handles the push/shift effect) */
 .main-content-wrapper {
@@ -132,59 +179,21 @@ button {
     width: calc(100% - 250px);
 }
 
-/* Main Content Element - Removes previous inline/duplicate padding */
-main {
-    padding: 0; /* Clear padding; the wrapper handles all spacing */
-}
 
-/* Sidebar Styles */
-.sidebar {
-  position: fixed;
-  top: 50px;
-  left: 0;
-  width: 250px;
-  height: calc(100% - 50px);
-  overflow-y: auto; /* CRITICAL: Enables scrolling for the entire sidebar content */
-
-  background-color: #fff;
-
-  transform: translateX(-100%);
-  transition: transform 0.3s ease-in-out;
-  box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
-  z-index: 100;
-}
-
-
-/* Class that slides the sidebar into view */
-.sidebar.open {
-  transform: translateX(0);
-}
-
-.sidebar ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-}
-
-.sidebar li a {
-  display: block;
-  padding: 10px 15px;
-  text-decoration: none;
-  color: #333;
-}
-
-.sidebar li a:hover {
-  background-color: #eee;
-}
-
-
-/* --- PRODUCT CONTROLS IN SIDEBAR STYLES --- */
+/* --------------------------------------------------
+   SIDEBAR CONTROLS & PRODUCT SUMMARY
+   -------------------------------------------------- */
 
 .sidebar-separator {
     border: 0;
     height: 1px;
     background-color: #ddd;
     margin: 10px 0;
+}
+
+.sidebar-separator.faint {
+    background-color: #f0f0f0;
+    margin: 15px 0 10px 0;
 }
 
 .sidebar-section {
@@ -198,15 +207,50 @@ main {
     text-transform: uppercase;
 }
 
-.sidebar-separator.faint {
-    background-color: #f0f0f0;
-    margin: 15px 0 10px 0;
+/* --- Search & Filter Styles --- */
+
+.search-input-container input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    box-sizing: border-box;
 }
 
-/* Sorting Row Layout */
+.search-options label {
+    display: block;
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.checkbox-group label {
+    font-weight: normal;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 8px;
+}
+
+
+/* --- Sort Controls Styles --- */
+
 .sort-controls {
     display: flex;
-    flex-wrap: wrap; /* Allows the direction buttons to wrap if space is tight */
+    flex-wrap: wrap;
     align-items: center;
     gap: 10px;
     margin-bottom: 5px;
@@ -218,7 +262,6 @@ main {
     color: #333;
 }
 
-/* Radio Button Group Layout (Horizontal) */
 .radio-group {
     display: flex;
     gap: 10px;
@@ -236,81 +279,38 @@ main {
     margin-right: 4px;
 }
 
-
-/* Sort Direction Arrows */
 .sort-direction {
     display: flex;
     align-items: center;
-    margin-left: auto; /* Pushes the arrows to the right side of the row */
+    margin-left: auto;
 }
 
 .sort-arrow {
-    /* Base style for the buttons */
     padding: 3px 5px;
     border: 1px solid #ccc;
     font-size: 1.2em;
     line-height: 1;
     height: 24px;
     width: 24px;
-
-    /* Default: Faint color */
     color: #aaa;
     background-color: #fff;
 }
 
 .sort-arrow:first-child {
-    border-radius: 4px 0 0 4px; /* Left button border */
+    border-radius: 4px 0 0 4px;
 }
 
 .sort-arrow:last-child {
-    border-left: none; /* Merge the borders in the middle */
-    border-radius: 0 4px 4px 0; /* Right button border */
+    border-left: none;
+    border-radius: 0 4px 4px 0;
 }
 
-/* Style for the active/default arrow */
 .sort-arrow.active {
-    color: #333; /* Darker color for active/default */
+    color: #333;
     border-color: #888;
 }
 
-/* Search Input Styling */
-.search-input-container input {
-    width: 100%;
-    padding: 8px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 15px;
-    box-sizing: border-box; /* Important for width: 100% to include padding */
-}
-
-/* Search Options Styling */
-.search-options label {
-    display: block; /* Makes "Search Fields:" a block element */
-    font-weight: bold;
-    font-size: 0.9em;
-    color: #333;
-    margin-bottom: 5px;
-}
-
-.checkbox-group {
-    display: flex;
-    flex-direction: column; /* Stacks checkboxes vertically */
-    gap: 5px;
-}
-
-.checkbox-group label {
-    font-weight: normal; /* Override the bold style for the label group */
-    display: flex; /* Aligns input and text horizontally */
-    align-items: center;
-    cursor: pointer;
-    font-size: 0.9em;
-    color: #333;
-}
-
-.checkbox-group input[type="checkbox"] {
-    margin-right: 8px;
-    /* You can add custom styling here if needed */
-}
+/* --- Product Summary List Styles --- */
 
 .result-summary {
     padding-top: 5px;
@@ -320,9 +320,9 @@ main {
 }
 
 #product-result-count {
-    display: block; /* Makes it take up its own line */
-    font-weight: bold; /* Keep the count bold */
-    text-align: center; /* Center the count itself */
+    display: block;
+    font-weight: bold;
+    text-align: center;
     margin-bottom: 5px;
 }
 
@@ -344,7 +344,6 @@ main {
     white-space: nowrap;
     text-overflow: ellipsis;
     border-bottom: 1px dotted #f0f0f0;
-
     font-weight: normal;
     text-align: left;
 }
@@ -360,7 +359,262 @@ main {
     text-align: center;
 }
 
-/* --- SCROLL-TO-TOP BUTTON STYLES --- */
+/* --------------------------------------------------
+   PRODUCTS GRID & CARD STYLES
+   -------------------------------------------------- */
+
+.products-page {
+    padding: 0 10px;
+}
+
+/* 1. GRID CONTAINER */
+.product-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px;
+    padding: 20px 0;
+}
+
+/* 2. INDIVIDUAL PRODUCT CARD */
+.product-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+    /* Enforce TALLER-THAN-WIDE aspect ratio */
+    padding-bottom: 120%;
+    position: relative;
+    cursor: pointer; /* Indicate it's clickable */
+}
+
+/* Content wrapper inside the card to handle absolute positioning */
+.product-card > * {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    padding: 8px;
+}
+
+/* 3. CARD SECTIONS */
+
+.card-header {
+    top: 0;
+    height: 15%;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #eee;
+    box-sizing: border-box;
+}
+
+.card-image-container {
+    top: 15%;
+    height: 70%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.card-image-container img {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.card-footer {
+    bottom: 0;
+    height: 15%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background-color: #f7f7f7;
+    border-top: 1px solid #eee;
+    box-sizing: border-box;
+}
+
+/* 4. TAG BUBBLES */
+.tag {
+    background-color: #e0e7ff;
+    color: #4338ca;
+    font-size: 0.7em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap;
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* --------------------------------------------------
+   PRODUCT DETAIL MODAL STYLES (SIMPLIFIED STRUCTURE)
+   -------------------------------------------------- */
+
+/* The Modal Overlay (Hidden by Default) */
+.modal-overlay {
+    display: none;
+    position: fixed;
+    z-index: 5000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.6);
+    justify-content: center;
+    align-items: center;
+    padding-top: 50px;
+}
+
+/* Modal visible state (Controlled by JS) */
+.modal-overlay.open {
+    display: flex;
+}
+
+/* Modal Content Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Back to a tighter width */
+    max-width: 700px;
+    border-radius: 10px;
+    box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+    position: relative;
+    transition: transform 0.3s ease-out;
+    transform: scale(0.9);
+}
+
+.modal-overlay.open .modal-content {
+    transform: scale(1);
+}
+
+/* Close Button */
+.modal-close-btn {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    line-height: 1;
+    padding: 0 5px;
+}
+
+.modal-close-btn:hover,
+.modal-close-btn:focus {
+    color: #000;
+    text-decoration: none;
+}
+
+/* Header H2 styling (now holds the short description) */
+#modal-product-details h2 {
+    font-size: 1.5em;
+    color: #333;
+    margin-top: 0;
+    margin-bottom: 15px;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Modal Body Layout (Image on Left, Info on Right) */
+.modal-body {
+    display: flex;
+    gap: 20px;
+    align-items: flex-start;
+    padding-top: 10px;
+    padding-bottom: 20px;
+}
+
+.modal-body img {
+    max-width: 40%;
+    height: auto;
+    border-radius: 5px;
+}
+
+.modal-info {
+    flex-grow: 1;
+    font-size: 1.0em;
+    display: flex;
+    flex-direction: column; /* Stack info paragraphs vertically */
+    gap: 10px;
+}
+
+.modal-info strong {
+    color: #333;
+}
+
+.modal-info p {
+    margin: 0; /* Remove default paragraph margins */
+}
+
+/* Style for the default/faint notes text */
+#modal-notes.faint-none {
+    color: #888;
+    font-style: italic;
+    font-size: 0.95em;
+}
+
+
+/* Modal Footer Area (Tags and Link) */
+.modal-footer-area {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end; /* Aligns content to the bottom of the section */
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+}
+
+/* Tags (Left Aligned) */
+.modal-tags-container {
+    text-align: left;
+    font-size: 0.9em;
+    flex-grow: 1;
+    padding-top: 5px;
+}
+
+/* Tags bubble styling in the modal */
+.modal-tags-container .tag {
+    display: inline-block;
+    padding: 3px 8px;
+    margin: 2px;
+    border-radius: 12px;
+    background-color: #e0f7fa;
+    color: #00838f;
+    font-size: 0.8em;
+}
+
+/* Source Link (Right Aligned) */
+.modal-link-container {
+    text-align: right;
+}
+
+#modal-source-link {
+    font-weight: bold;
+    color: #1a73e8; /* A common link color */
+    text-decoration: none;
+    font-size: 0.9em;
+}
+
+#modal-source-link:hover {
+    text-decoration: underline;
+}
+
+/* --------------------------------------------------
+   SCROLL-TO-TOP BUTTON STYLES
+   -------------------------------------------------- */
 
 .scroll-btn {
     position: fixed;
@@ -380,116 +634,17 @@ main {
     cursor: pointer;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 
-    /* Always visible */
-    opacity: 1;
-    pointer-events: auto;
-    transition: background-color 0.3s;
+    /* Initially hidden, only show with JS .show class */
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s, background-color 0.3s;
 }
 
-/* .scroll-btn.show {
+.scroll-btn.show {
     opacity: 1;
     pointer-events: auto;
-} */
+}
 
 .scroll-btn:hover {
     background-color: #555;
-}
-
-.products-page {
-    /* Optional: Add some top margin/padding below the H2 */
-    padding: 0 10px;
-}
-
-/* 1. GRID CONTAINER */
-.product-grid {
-    display: grid;
-    /* Responsive Grid: Adjust the number of columns based on screen size */
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px; /* Space between cards */
-    padding: 20px 0;
-}
-
-/* 2. INDIVIDUAL PRODUCT CARD */
-.product-card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
-    overflow: hidden;
-    display: flex;
-    flex-direction: column;
-    text-align: center;
-
-    /* Enforce TALLER-THAN-WIDE aspect ratio using padding hack */
-    padding-bottom: 120%; /* Sets height relative to width (100% width + 20% extra height) */
-    position: relative;
-}
-
-/* Content wrapper inside the card to handle absolute positioning */
-.product-card > * {
-    position: absolute;
-    width: 100%;
-    left: 0;
-    padding: 8px;
-}
-
-/* 3. CARD SECTIONS */
-
-.card-header {
-    /* Top section: Description */
-    top: 0;
-    height: 15%; /* Takes up 15% of the card height */
-    font-size: 0.9em;
-    font-weight: bold;
-    color: #333;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-bottom: 1px solid #eee;
-    box-sizing: border-box;
-}
-
-.card-image-container {
-    /* Middle section: Image */
-    top: 15%; /* Starts after the header */
-    height: 70%; /* Takes up the majority of the height */
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    box-sizing: border-box;
-}
-
-.card-image-container img {
-    /* Maximize image size within its container */
-    max-width: 100%;
-    max-height: 100%;
-    object-fit: contain; /* Ensures the whole image is visible without cropping */
-}
-
-.card-footer {
-    /* Bottom section: Tags */
-    bottom: 0;
-    height: 15%; /* Takes up 15% of the card height */
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-    background-color: #f7f7f7;
-    border-top: 1px solid #eee;
-    box-sizing: border-box;
-}
-
-/* 4. TAG BUBBLES */
-.tag {
-    background-color: #e0e7ff; /* Light blue/purple */
-    color: #4338ca; /* Darker text */
-    font-size: 0.7em;
-    padding: 2px 6px;
-    border-radius: 4px;
-    white-space: nowrap; /* Prevent tags from breaking */
-    max-width: 100%;
-    overflow: hidden;
-    text-overflow: ellipsis;
 }
