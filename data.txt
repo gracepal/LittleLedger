@@ -1,0 +1,11 @@
+const products = [
+  {
+    id: #,
+    name: '',
+    photo: 'images/products/.png',
+    tags: [],
+    description: '',
+    notes: '',
+    link: '',
+  },
+];
