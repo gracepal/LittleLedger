@@ -2,13 +2,16 @@
 
 // --- ELEMENT SELECTION ---
 
+// Select the main content area and the products link
+const mainContent = document.getElementById('main-content');
+const viewProductsLink = document.getElementById('view-products-link');
+
 // Sidebar and Main Content Elements
-// const container = document.querySelector('.container'); // Removed, as it's not used in this JS
 const menuToggleButton = document.getElementById('menu-toggle');
 const sidebarMenu = document.getElementById('sidebar-menu');
 const mainWrapper = document.getElementById('main-wrapper');
 
-// 👇 New: User Dropdown Elements
+// User Dropdown Elements
 const userMenuToggleButton = document.getElementById('user-menu-toggle');
 const userDropdown = document.getElementById('user-dropdown');
 
@@ -19,6 +22,40 @@ const SCROLL_THRESHOLD = 300; // Define threshold for clarity
 /**************************************************************
  * FUNCTIONS
  */
+
+// Function to generate the HTML for the placeholder products page
+function getProductsPageHTML() {
+  // This is the placeholder for the product list page
+  return `
+        <div class="products-page">
+            <h2>All Products</h2>
+            <p>Welcome to the products catalog! This is the placeholder for displaying ${products.length} items.</p>
+            <div class="product-list-placeholder" style="height: 100vh; background-color: #f0f0f0; padding: 20px; border-radius: 5px;">
+                <p>Product Grid will go here.</p>
+                <p>This content is long enough to ensure scrolling works.</p>
+                <p>More content...</p>
+                <p>Even more content...</p>
+                <p>Scroll down to test the button!</p>
+                <p style="height: 500px;">Placeholder Space</p>
+            </div>
+        </div>
+    `;
+}
+
+// Function to handle the navigation and view update
+function loadProductsView(event) {
+  event.preventDefault(); // Stop the link from trying to navigate traditionally
+
+  // 1. Update the main content area with the new HTML
+  mainContent.innerHTML = getProductsPageHTML();
+
+  // 2. Close the sidebar after navigation
+  sidebarMenu.classList.remove('open');
+  mainWrapper.classList.remove('shifted');
+
+  // 3. (Optional but recommended) Scroll to the top of the page
+  window.scrollTo(0, 0);
+}
 
 // Show/Hide Button based on Scroll Position
 function toggleScrollButton() {
@@ -77,6 +114,6 @@ document.addEventListener('click', function (event) {
 });
 
 // --- 4. SCROLL TO TOP LISTENERS ---
-
-// Add event listener for scroll to top button
+// window.addEventListener('scroll', toggleScrollButton);
 scrollButton.addEventListener('click', scrollToTop);
+viewProductsLink.addEventListener('click', loadProductsView);
