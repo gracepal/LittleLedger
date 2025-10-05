@@ -6,6 +6,10 @@
 const mainContent = document.getElementById('main-content');
 const viewProductsLink = document.getElementById('view-products-link');
 
+// Select the home link and the template container
+const viewHomeLink = document.getElementById('view-home-link');
+const homeTemplate = document.getElementById('home-template');
+
 // Sidebar and Main Content Elements
 const menuToggleButton = document.getElementById('menu-toggle');
 const sidebarMenu = document.getElementById('sidebar-menu');
@@ -22,6 +26,25 @@ const SCROLL_THRESHOLD = 300; // Define threshold for clarity
 /**************************************************************
  * FUNCTIONS
  */
+
+// Function to load the original home content
+function loadHomeView(event) {
+  if (event) event.preventDefault(); // Stop the link from acting as a traditional link
+
+  // 1. Get the content from the hidden template
+  // We use innerHTML to get the content *inside* the template div
+  const homeContentHTML = homeTemplate.innerHTML;
+
+  // 2. Update the main content area with the home HTML
+  mainContent.innerHTML = homeContentHTML;
+
+  // 3. Ensure the sidebar is closed
+  sidebarMenu.classList.remove('open');
+  mainWrapper.classList.remove('shifted');
+
+  // 4. Scroll to the top
+  window.scrollTo(0, 0);
+}
 
 // Function to generate the HTML for the placeholder products page
 function getProductsPageHTML() {
@@ -116,4 +139,6 @@ document.addEventListener('click', function (event) {
 // --- 4. SCROLL TO TOP LISTENERS ---
 // window.addEventListener('scroll', toggleScrollButton);
 scrollButton.addEventListener('click', scrollToTop);
+viewHomeLink.addEventListener('click', loadHomeView);
 viewProductsLink.addEventListener('click', loadProductsView);
+document.addEventListener('DOMContentLoaded', loadHomeView);
