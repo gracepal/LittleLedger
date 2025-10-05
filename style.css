@@ -176,6 +176,65 @@ main {
 }
 
 
+/* --- PRODUCT CONTROLS IN SIDEBAR STYLES --- */
+
+.sidebar-separator {
+    border: 0;
+    height: 1px;
+    background-color: #ddd;
+    margin: 10px 0;
+}
+
+.sidebar-section {
+    padding: 10px 15px;
+}
+
+.sidebar-section h3 {
+    margin: 0 0 10px 0;
+    font-size: 1.1em;
+    color: #555;
+    text-transform: uppercase;
+}
+
+/* Search Input Styling */
+.search-input-container input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 15px;
+    box-sizing: border-box; /* Important for width: 100% to include padding */
+}
+
+/* Search Options Styling */
+.search-options label {
+    display: block; /* Makes "Search Fields:" a block element */
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.checkbox-group {
+    display: flex;
+    flex-direction: column; /* Stacks checkboxes vertically */
+    gap: 5px;
+}
+
+.checkbox-group label {
+    font-weight: normal; /* Override the bold style for the label group */
+    display: flex; /* Aligns input and text horizontally */
+    align-items: center;
+    cursor: pointer;
+    font-size: 0.9em;
+    color: #333;
+}
+
+.checkbox-group input[type="checkbox"] {
+    margin-right: 8px;
+    /* You can add custom styling here if needed */
+}
+
 /* --- SCROLL-TO-TOP BUTTON STYLES --- */
 
 .scroll-btn {

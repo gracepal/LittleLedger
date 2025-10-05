@@ -3,6 +3,7 @@
 // --- ELEMENT SELECTION ---
 
 // Select the main content area and the products link
+// NOTE: viewProductsLink is ONLY used for the initial attachment here. It is re-selected in attachSidebarListeners()
 const mainContent = document.getElementById('main-content');
 const viewProductsLink = document.getElementById('view-products-link');
 
@@ -24,39 +25,74 @@ const scrollButton = document.getElementById('scrollToTopBtn');
 const SCROLL_THRESHOLD = 300; // Define threshold for clarity
 
 /**************************************************************
- * FUNCTIONS
+ * NEW HELPER FUNCTION: Re-attach necessary listeners
  */
+function attachSidebarListeners() {
+  // 1. Re-select the products link element (it was destroyed by innerHTML swap)
+  const reAttachedProductsLink = document.getElementById('view-products-link');
 
-// Function to load the original home content
-function loadHomeView(event) {
-  if (event) event.preventDefault(); // Stop the link from acting as a traditional link
-
-  // 1. Get the content from the hidden template
-  // We use innerHTML to get the content *inside* the template div
-  const homeContentHTML = homeTemplate.innerHTML;
-
-  // 2. Update the main content area with the home HTML
-  mainContent.innerHTML = homeContentHTML;
-
-  // 3. Ensure the sidebar is closed
-  sidebarMenu.classList.remove('open');
-  mainWrapper.classList.remove('shifted');
-
-  // 4. Scroll to the top
-  window.scrollTo(0, 0);
+  // 2. Attach the new listener (if the element exists)
+  if (reAttachedProductsLink) {
+    // We ensure the link is active by attaching the listener to the newly created element
+    reAttachedProductsLink.addEventListener('click', loadProductsView);
+  }
 }
 
-// Generates the HTML string for the tag bubbles at the bottom of the card.
+/**************************************************************
+ * NEW FUNCTIONS FOR SIDEBAR CONTROLS
+ */
+
+// Define the HTML for the product-specific controls
+function getProductsSidebarControlsHTML() {
+  return `
+        <hr class="sidebar-separator">
+
+        <div class="sidebar-section" id="product-controls">
+            <h3>Products</h3>
+
+            <div class="search-input-container">
+                <input type="text" id="product-search-input" placeholder="Search products...">
+            </div>
+
+            <div class="search-options">
+                <label>Search Fields:</label>
+
+                <div class="checkbox-group">
+                    <label>
+                        <input type="checkbox" id="search-tags" checked>
+                        Include tags
+                    </label>
+                    <label>
+                        <input type="checkbox" id="search-titles" checked>
+                        Include titles
+                    </label>
+                    <label>
+                        <input type="checkbox" id="search-all-text" checked>
+                        Include all text
+                    </label>
+                </div>
+            </div>
+        </div>
+    `;
+}
+
+/**************************************************************
+ * NEW FUNCTIONS FOR RENDERING PRODUCTS
+ */
+
+/**
+ * Generates the HTML string for the tag bubbles at the bottom of the card.
+ */
 function generateTagBubbles(tags) {
   if (!tags || tags.length === 0) return '';
 
-  // Creates HTML like: <span class="tag">bath</span><span class="tag">skincare</span>
   return tags.map((tag) => `<span class="tag">${tag}</span>`).join('');
 }
 
-// Generates the HTML string for a single product card.
+/**
+ * Generates the HTML string for a single product card.
+ */
 function generateProductCard(product) {
-  // Note: The photo path is relative to index.html
   const imagePath = product.photo;
 
   return `
@@ -74,9 +110,12 @@ function generateProductCard(product) {
     `;
 }
 
-// Generates the HTML for the full products page view.
+/**
+ * Generates the HTML for the full products page view.
+ */
 function getProductsPageHTML() {
-  // Map the products array to an array of card HTML strings
+  // Map the products array (from data.js) to an array of card HTML strings
+  // NOTE: 'products' is assumed to be global from data.js
   const productCardsHTML = products.map(generateProductCard).join('');
 
   // Wrap the cards in a grid container
@@ -91,18 +130,94 @@ function getProductsPageHTML() {
     `;
 }
 
+/**************************************************************
+ * ROUTING AND VIEW FUNCTIONS
+ */
+
+// Function to handle the initial view loading based on the URL hash
+function routePage() {
+  // 1. Get the hash (e.g., '#products' or '')
+  const hash = window.location.hash;
+
+  // 2. Load the appropriate view
+  if (hash === '#products') {
+    // Load the products page without changing the URL hash again (pass false)
+    loadProductsView(false);
+  } else {
+    // Default to the home view (pass false)
+    loadHomeView(false);
+  }
+}
+
+// Function to load the original home content
+function loadHomeView(event) {
+  // Check if an event object was passed to prevent default link action and set hash
+  if (event) {
+    event.preventDefault();
+    window.location.hash = ''; // Clear the hash for the home page
+  }
+
+  // 1. Get the content from the hidden template
+  const homeContentHTML = homeTemplate.innerHTML;
+
+  // 2. Update the main content area with the home HTML
+  mainContent.innerHTML = homeContentHTML;
+
+  // CRITICAL: Restore the sidebar to its original state (only <ul> links)
+  // This recreates the 'See Products' link element.
+  sidebarMenu.innerHTML = `
+        <ul>
+            <li><a href="#" id="view-products-link">See Products</a></li>
+            <li><a href="#">Calendar</a></li>
+            <li><a href="#">Log Event</a></li>
+        </ul>
+    `;
+
+  // CRITICAL: Re-attach the event listener to the NEW 'See Products' link element
+  attachSidebarListeners();
+
+  // 3. Ensure the sidebar is closed
+  // REMOVED: sidebarMenu.classList.remove('open');
+  // REMOVED: mainWrapper.classList.remove('shifted');
+
+  // NOTE: The sidebar will now remain in its current open/closed state.
+
+  // 4. Scroll to the top
+  window.scrollTo(0, 0);
+}
+
 // Function to handle the navigation and view update
 function loadProductsView(event) {
-  event.preventDefault(); // Stop the link from trying to navigate traditionally
+  // Check if an event object was passed to prevent default link action and set hash
+  if (event) {
+    event.preventDefault();
+    window.location.hash = '#products';
+  }
 
   // 1. Update the main content area with the new HTML
   mainContent.innerHTML = getProductsPageHTML();
 
-  // 2. Close the sidebar after navigation
-  sidebarMenu.classList.remove('open');
-  mainWrapper.classList.remove('shifted');
+  // Overwrite the sidebar content with the links PLUS the controls
+  sidebarMenu.innerHTML = `
+        <ul>
+            <li><a href="#" id="view-products-link">See Products</a></li>
+            <li><a href="#">Calendar</a></li>
+            <li><a href="#">Log Event</a></li>
+        </ul>
+        ${getProductsSidebarControlsHTML()}
+    `;
 
-  // 3. (Optional but recommended) Scroll to the top of the page
+  // 2. We must re-attach the listener to the 'See Products' link
+  attachSidebarListeners();
+
+  // 3. Close the sidebar after navigation
+  // REMOVED: sidebarMenu.classList.remove('open');
+  // REMOVED: mainWrapper.classList.remove('shifted');
+
+  // NOTE: The sidebar will now remain in its current open/closed state.
+  // If it was open before the click, it stays open.
+
+  // 4. Scroll to the top of the page
   window.scrollTo(0, 0);
 }
 
@@ -163,8 +278,16 @@ document.addEventListener('click', function (event) {
 });
 
 // --- 4. SCROLL TO TOP LISTENERS ---
-// window.addEventListener('scroll', toggleScrollButton);
+window.addEventListener('scroll', toggleScrollButton);
 scrollButton.addEventListener('click', scrollToTop);
+
+// --- 5. VIEW SWITCHING LISTENERS (Initial Setup) ---
+
+// Home button always exists, so attach its listener once
 viewHomeLink.addEventListener('click', loadHomeView);
-viewProductsLink.addEventListener('click', loadProductsView);
-document.addEventListener('DOMContentLoaded', loadHomeView);
+
+// The 'See Products' link listener is attached in loadHomeView/attachSidebarListeners
+
+// Handle initial page load and browser history (back/forward)
+document.addEventListener('DOMContentLoaded', routePage);
+window.addEventListener('hashchange', routePage);
