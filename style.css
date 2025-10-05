@@ -196,6 +196,81 @@ main {
     text-transform: uppercase;
 }
 
+.sidebar-separator.faint {
+    background-color: #f0f0f0;
+    margin: 15px 0 10px 0;
+}
+
+/* Sorting Row Layout */
+.sort-controls {
+    display: flex;
+    flex-wrap: wrap; /* Allows the direction buttons to wrap if space is tight */
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 5px;
+}
+
+.sort-label {
+    font-weight: bold;
+    font-size: 0.9em;
+    color: #333;
+}
+
+/* Radio Button Group Layout (Horizontal) */
+.radio-group {
+    display: flex;
+    gap: 10px;
+}
+
+.radio-group label {
+    font-size: 0.9em;
+    color: #333;
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+
+.radio-group input[type="radio"] {
+    margin-right: 4px;
+}
+
+
+/* Sort Direction Arrows */
+.sort-direction {
+    display: flex;
+    align-items: center;
+    margin-left: auto; /* Pushes the arrows to the right side of the row */
+}
+
+.sort-arrow {
+    /* Base style for the buttons */
+    padding: 3px 5px;
+    border: 1px solid #ccc;
+    font-size: 1.2em;
+    line-height: 1;
+    height: 24px;
+    width: 24px;
+
+    /* Default: Faint color */
+    color: #aaa;
+    background-color: #fff;
+}
+
+.sort-arrow:first-child {
+    border-radius: 4px 0 0 4px; /* Left button border */
+}
+
+.sort-arrow:last-child {
+    border-left: none; /* Merge the borders in the middle */
+    border-radius: 0 4px 4px 0; /* Right button border */
+}
+
+/* Style for the active/default arrow */
+.sort-arrow.active {
+    color: #333; /* Darker color for active/default */
+    border-color: #888;
+}
+
 /* Search Input Styling */
 .search-input-container input {
     width: 100%;
@@ -233,6 +308,14 @@ main {
 .checkbox-group input[type="checkbox"] {
     margin-right: 8px;
     /* You can add custom styling here if needed */
+}
+
+.result-summary {
+    padding-top: 5px;
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #4a5568; /* Slightly darker text for visibility */
+    text-align: center;
 }
 
 /* --- SCROLL-TO-TOP BUTTON STYLES --- */

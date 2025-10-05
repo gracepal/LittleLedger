@@ -48,7 +48,11 @@ function attachSidebarListeners() {
  */
 
 // Define the HTML for the product-specific controls
+// Define the HTML for the product-specific controls
 function getProductsSidebarControlsHTML() {
+  // NOTE: We assume 'products' is a global array from data.js
+  const productCount = products.length;
+
   return `
         <hr class="sidebar-separator">
 
@@ -77,7 +81,35 @@ function getProductsSidebarControlsHTML() {
                     </label>
                 </div>
             </div>
-        </div>
+
+            <hr class="sidebar-separator faint">
+
+            <div class="sort-controls">
+                <span class="sort-label">Sort:</span>
+
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="product-sort" value="name" checked> Name
+                    </label>
+                    <label>
+                        <input type="radio" name="product-sort" value="added"> Added
+                    </label>
+                    <label>
+                        <input type="radio" name="product-sort" value="updated"> Updated
+                    </label>
+                </div>
+
+                <div class="sort-direction">
+                    <button id="sort-asc-btn" class="sort-arrow active">&uarr;</button>
+                    <button id="sort-desc-btn" class="sort-arrow">&darr;</button>
+                </div>
+            </div>
+
+            <hr class="sidebar-separator faint">
+            <div class="result-summary">
+                <span id="product-result-count">Showing ${productCount} products</span>
+            </div>
+            </div>
     `;
 }
 
