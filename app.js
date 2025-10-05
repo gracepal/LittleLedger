@@ -1,90 +1,71 @@
 // app.js
 
+let debug = true; // set false to reduce noise or to print specific content
+
 // --- ELEMENT SELECTION ---
-
-// Select the main content area and the products link
-const mainContent = document.getElementById('main-content');
-const viewProductsLink = document.getElementById('view-products-link');
-
-// Select the home link and the template container
-const viewHomeLink = document.getElementById('view-home-link');
-const homeTemplate = document.getElementById('home-template');
-
-// Sidebar and Main Content Elements
-const menuToggleButton = document.getElementById('menu-toggle');
-const sidebarMenu = document.getElementById('sidebar-menu');
+// Top Navbar & Body(s)
 const mainWrapper = document.getElementById('main-wrapper');
-
-// User Dropdown Elements
+const mainContent = document.getElementById('main-content');
+const homeTemplate = document.getElementById('home-template');
+const menuToggleButton = document.getElementById('menu-toggle');
 const userMenuToggleButton = document.getElementById('user-menu-toggle');
-const userDropdown = document.getElementById('user-dropdown');
-
-// Scroll Button Elements
 const scrollButton = document.getElementById('scrollToTopBtn');
-const SCROLL_THRESHOLD = 300; // Define threshold for clarity
-
-// Modal element variables will be defined globally but SELECTED later, after injection
-// modalDescription is the H2 header.
+const SCROLL_THRESHOLD = 300;
+// Sidebar
+const sidebarMenu = document.getElementById('sidebar-menu');
+const viewHomeLink = document.getElementById('view-home-link');
+const viewProductsLink = document.getElementById('view-products-link');
+// User dropdown
+const userDropdown = document.getElementById('user-dropdown');
+// Products Page
 let productModal, modalCloseBtn, modalTitle, modalImage, modalDescription, modalTags;
-
-// NEW Modal Elements (modalNotes and modalSourceLink remain)
 let modalNotes, modalSourceLink;
 
-/**************************************************************
- * NEW HELPER FUNCTION: Re-attach necessary listeners
- */
+// --- HELPER FUNCTIONS ---
+
+// Re-attach necessary listeners
 function attachSidebarListeners() {
-  // Re-select the links after innerHTML replacement
+  if (debug) if (debug) console.log('[${getTimestamp()}] FUNCTION: attachSidebarListeners()');
+  // Re-select links after replacing innerHTML
   const reAttachedProductsLink = document.getElementById('view-products-link');
   const reAttachedHomeLink = document.getElementById('view-home-link');
-
+  // Add event listener to load Products Page if link clicked
   if (reAttachedProductsLink) {
     reAttachedProductsLink.addEventListener('click', loadProductsView);
   }
-
+  // Add event listener to load Home page if link clicked
   if (reAttachedHomeLink) {
     reAttachedHomeLink.addEventListener('click', loadHomeView);
   }
 }
 
-/**************************************************************
- * MODAL HANDLER FUNCTIONS
- */
-
-/**
- * Closes the product detail modal.
- */
+// Toggle product details modal close by removing "open" class if currently added
 function closeModal() {
+  if (debug) console.log('[${getTimestamp()}] FUNCTION: closeModal()');
   if (productModal) {
     productModal.classList.remove('open');
   }
 }
 
-/**
- * Opens and populates the product detail modal.
- * @param {string} productId - The ID of the product to display.
- */
+// Open and populate the product details modal
 function openModal(productId) {
-  // ... (product lookup logic remains the same) ...
+  if (debug) console.log(`[${getTimestamp()}] FUNCTION: openModal(productId=${productId})`);
+  // Target product object using product ID
   const idToFind = parseInt(productId, 10);
   const product = products.find((p) => p.id === idToFind);
-
+  // Print error if product ID not found
   if (!product) {
     console.error('Product not found for ID:', productId);
     return;
   }
-
-  // Populate the elements based on the new structure
-
-  // 1. HEADER (Description) & NAME (Info Section)
+  // Modal title is the user given (shorter) description
   modalDescription.textContent = product.description;
+  // Modal content reads full product name from Amazon, etc.
   modalTitle.textContent = product.name;
-
-  // 2. IMAGE
+  // Modal image taken from user-uploaded images
   modalImage.src = product.photo;
   modalImage.alt = product.name;
-
-  // 3. NOTES
+  // No notes currently, but reserved for adding product care and other important information
   if (product.notes && product.notes.trim() !== '') {
     modalNotes.textContent = product.notes;
     modalNotes.classList.remove('faint-none');
@@ -92,50 +73,44 @@ function openModal(productId) {
     modalNotes.textContent = '(none)';
     modalNotes.classList.add('faint-none');
   }
-
-  // 4. TAGS
+  // Tags to allow grouping and filtering in the future
   const tagsHtml = product.tags.map((tag) => `<span class="tag">${tag}</span>`).join(' ');
   modalTags.innerHTML = tagsHtml;
-
-  // 5. LINK (Updated text: "View Product")
+  // Link to open source (ex. Amazon) in a new tab
   if (product.link) {
     modalSourceLink.href = product.link;
-    modalSourceLink.textContent = 'View Product'; // <-- UPDATED TEXT
+    modalSourceLink.textContent = 'View Product';
     modalSourceLink.style.display = 'inline';
   } else {
     modalSourceLink.href = '#';
-    modalSourceLink.textContent = 'Source Unavailable';
+    modalSourceLink.textContent = 'No Product Link';
     modalSourceLink.style.display = 'none';
   }
-
-  // Open the modal
+  // Open modal by adding "open" class
   productModal.classList.add('open');
 }
 
-/**
- * Handles clicks on the product grid and delegates the event to open the modal.
- * @param {Event} event
- */
+// Read click and pass on clicked card's product ID to open modal with product details
 function handleProductCardClick(event) {
+  if (debug) console.log(`[${getTimestamp()}] FUNCTION: handleProductCardClick(event=`, event, `)`);
+  // Takes the card that is closet to the click event
   const card = event.target.closest('.product-card');
-
+  // If found, this card will have a "data-id" attribute string value
   if (card) {
-    const productId = card.dataset.id;
+    const productId = card.dataset.id; // grabs the "data-id" value
     if (productModal) {
+      // Then open modal with that product ID to populate with that product's details
       openModal(productId);
     }
   }
 }
 
-/**************************************************************
- * MODAL SETUP FUNCTIONS
- */
-
-/**
- * Returns the full HTML structure for the product detail modal.
- */
+// Create modal HTML
 function getModalHTML() {
-  // Note: The structure is simplified as requested
+  if (debug) console.log(`[${getTimestamp()}] FUNCTION: getModalHTML()`);
+  // Topmost contains the product description (short name) and a button to close the modal
+  // Followed by middle, product image left, full product name and notes on right
+  // Followed by bottom, tags on the left, and link to product (ex. Amazon) on right
   return `
         <div id="product-modal" class="modal-overlay">
             <div class="modal-content">
@@ -166,42 +141,38 @@ function getModalHTML() {
         `;
 }
 
-/**
- * Injects the modal HTML into the document body and selects its elements.
- */
+// Insert modal HTML and select elements into variables
 function injectModalContainer() {
+  if (debug) console.log(`[${getTimestamp()}] FUNCTION: injectModalContainer()`);
+  // Actually inserts to the end of body, in this case, after the script tags
   document.body.insertAdjacentHTML('beforeend', getModalHTML());
 
-  // CRITICAL: Select the elements now that they exist in the DOM
+  // Select elements now rendered in DOM
   productModal = document.getElementById('product-modal');
   modalCloseBtn = document.getElementById('modal-close-btn');
-
-  // Selectors for New Structure
-  modalDescription = document.getElementById('modal-description-header'); // H2 for description
-  modalTitle = document.getElementById('modal-name'); // Span for the long name
-
+  modalDescription = document.getElementById('modal-description-header'); // short user name
+  modalTitle = document.getElementById('modal-name'); // full-long product name
   modalImage = document.getElementById('modal-image');
-  modalTags = document.getElementById('modal-tags');
-
-  // NEW Selectors (modalNotes is now a <span>)
   modalNotes = document.getElementById('modal-notes');
+  modalTags = document.getElementById('modal-tags');
   modalSourceLink = document.getElementById('modal-source-link');
 }
 
-/**
- * Sets up all listeners related to the modal (after injection).
- */
+// Setup listeners for the modal (after injection).
 function setupModalListeners() {
+  if (debug) console.log(`[${getTimestamp()}] FUNCTION: setupModalListeners()`);
+  // Add event listener to gets closest product card from click, to use its
+  // "data-id" product ID to open modal with that product's specific details
   mainContent.addEventListener('click', handleProductCardClick);
-
+  // Add event listener to close open modal by removing its "open" class
   modalCloseBtn.addEventListener('click', closeModal);
-
+  // Add event listener to the dark overlay surrounding modal, to close modal
   productModal.addEventListener('click', function (event) {
     if (event.target === productModal) {
       closeModal();
     }
   });
-
+  // Add event listener to close modal if user presses the Escape key and modal is open
   document.addEventListener('keydown', function (event) {
     if (event.key === 'Escape' && productModal.classList.contains('open')) {
       closeModal();
@@ -209,14 +180,17 @@ function setupModalListeners() {
   });
 }
 
-/**************************************************************
- * NEW FUNCTIONS FOR SIDEBAR CONTROLS
- */
-
 // Define the HTML for the product-specific controls
 function getProductsSidebarControlsHTML() {
+  if (debug) console.log(`[${getTimestamp()}] FUNCTION: getProductsSidebarControlsHTML()`);
   const productCount = products.length;
-
+  // Add horizontal line below the generic/shared sidebar content
+  // Followed by title indicating "Products"
+  // Followed by a search input container, and 3 checkboxes under "Search Fields" header
+  // Followed by another horizontal line
+  // Followed by radio button group with 3 sort options under "Sort" header
+  // Followed by another horizontal line
+  // Followed by a results summary products list under "Showing <N> products" header
   return `
         <hr class="sidebar-separator">
 
@@ -280,17 +254,14 @@ function getProductsSidebarControlsHTML() {
     `;
 }
 
-/**
- * Generates the HTML list of product names for the sidebar summary.
- * @param {Array<Object>} productsArray - The array of products currently in view.
- * @returns {string} The HTML string for the list.
- */
+// Generate the HTML list of product names for the sidebar summary.
 function generateProductSummaryList(productsArray) {
+  if (debug) console.log(`[${getTimestamp()}] FUNCTION: generateProductSummaryList(productsArray=`, productsArray, `)`);
+  // If there is no array or it is empty, print message indicating no products
   if (!productsArray || productsArray.length === 0) {
     return '<p class="no-results">No products match your current filters.</p>';
   }
-
-  // Create a list of the product names
+  // Create a list of the product names up to 35 characters, then ellipses if longer
   const listItems = productsArray
     .map(
       (product) =>
@@ -299,29 +270,28 @@ function generateProductSummaryList(productsArray) {
         </li>`
     )
     .join('');
-
+  // Add above list of <li> tags inside below <ul> tag
   return `<ul class="product-summary-list">${listItems}</ul>`;
 }
 
-/**************************************************************
- * NEW FUNCTIONS FOR RENDERING PRODUCTS
- */
-
-/**
- * Generates the HTML string for the tag bubbles at the bottom of the card.
- */
+// Generate HTML string for tag bubbles at the bottom of the card
 function generateTagBubbles(tags) {
+  if (debug) console.log(`[${getTimestamp()}] FUNCTION: generateTagBubbles(tags=`, tags, `)`);
+  // Return empty string is tags is falsey, or it is empty
   if (!tags || tags.length === 0) return '';
-
+  // Otherwise create span tags with each tag
   return tags.map((tag) => `<span class="tag">${tag}</span>`).join('');
 }
 
-/**
- * Generates the HTML string for a single product card.
- */
+// Generate HTML string for a single product card
 function generateProductCard(product) {
+  if (debug) console.log(`[${getTimestamp()}] FUNCTION: generateProductCard(product=`, product, `)`);
   const imagePath = product.photo;
-
+  // Create product card with "data-id" to identify product
+  // Populate remainder of card with product-specific details
+  // Starting with the (shorter, user-given) product description
+  // Followed by the user-taken and submitted product image
+  // Followed by a list of product group/filter tags, if any
   return `
         <div class="product-card" data-id="${product.id}">
             <div class="card-header">
@@ -337,11 +307,10 @@ function generateProductCard(product) {
     `;
 }
 
-/**
- * Generates the HTML for the full products page view.
- */
+// Generate HTML for full products page view
 function getProductsPageHTML() {
-  // Map the products array (from data.js) to an array of card HTML strings
+  if (debug) console.log(`[${getTimestamp()}] FUNCTION: getProductsPageHTML()`);
+  // Construct html for each product card then join together
   const productCardsHTML = products.map(generateProductCard).join('');
 
   // Wrap the cards in a grid container
@@ -362,7 +331,8 @@ function getProductsPageHTML() {
 
 // Function to handle the initial view loading based on the URL hash
 function routePage() {
-  const hash = window.location.hash;
+  const hash = window.location.hash; // returns url portion starting with hash '#'
+  if (debug) console.log(`[${getTimestamp()}] FUNCTION: routePage(); current hash is "${hash}"`);
 
   if (hash === '#products') {
     loadProductsView(false);
@@ -373,6 +343,7 @@ function routePage() {
 
 // Function to load the original home content
 function loadHomeView(event) {
+  if (debug) console.log(`[${getTimestamp()}] FUNCTION: loadHomeView(event=`, event, `)`);
   if (event) {
     event.preventDefault();
     window.location.hash = ''; // Clear the hash for the home page
@@ -397,6 +368,7 @@ function loadHomeView(event) {
 
 // Function to handle the navigation and view update
 function loadProductsView(event) {
+  if (debug) console.log(`[${getTimestamp()}] FUNCTION: loadProductsView(event=`, event, `)`);
   if (event) {
     event.preventDefault();
     window.location.hash = '#products';
@@ -421,6 +393,7 @@ function loadProductsView(event) {
 
 // Show/Hide Button based on Scroll Position
 function toggleScrollButton() {
+  if (debug) console.log(`[${getTimestamp()}] FUNCTION: toggleScrollButton()`);
   if (document.body.scrollTop > SCROLL_THRESHOLD || document.documentElement.scrollTop > SCROLL_THRESHOLD) {
     scrollButton.classList.add('show');
   } else {
@@ -430,9 +403,20 @@ function toggleScrollButton() {
 
 // Scroll to the Top when Button is Clicked
 function scrollToTop() {
+  if (debug) console.log(`[${getTimestamp()}] FUNCTION: scrollToTop()`);
   window.scrollTo({
     top: 0,
     behavior: 'smooth',
+  });
+}
+
+// Get timestamp
+function getTimestamp() {
+  return new Date().toLocaleTimeString('en-US', {
+    hour: '2-digit',
+    minute: '2-digit',
+    second: '2-digit',
+    hour12: true, // or false for 24-hour time
   });
 }
 
@@ -443,6 +427,7 @@ function scrollToTop() {
 // --- SIDEBAR TOGGLE (PUSH EFFECT) ---
 
 menuToggleButton.addEventListener('click', function () {
+  if (debug) console.log(`[${getTimestamp()}] EVENT LISTENER: "click" event on "menuToggleButton"`);
   sidebarMenu.classList.toggle('open');
   mainWrapper.classList.toggle('shifted');
 });
@@ -450,6 +435,7 @@ menuToggleButton.addEventListener('click', function () {
 // --- DROPDOWN TOGGLE (OVERLAY) ---
 
 userMenuToggleButton.addEventListener('click', function (event) {
+  if (debug) console.log(`[${getTimestamp()}] EVENT LISTENER: "click" event on "userMenuToggleButton"}"`);
   event.stopPropagation();
   userDropdown.classList.toggle('visible');
 });
@@ -457,6 +443,7 @@ userMenuToggleButton.addEventListener('click', function (event) {
 // --- DROPDOWN CLOSE ON EXTERNAL CLICK ---
 
 document.addEventListener('click', function (event) {
+  if (debug) console.log(`[${getTimestamp()}] EVENT LISTENER: "click" event on "document"`);
   const isClickInsideDropdown = userDropdown.contains(event.target);
   const isClickOnToggle = userMenuToggleButton.contains(event.target);
 
@@ -466,19 +453,23 @@ document.addEventListener('click', function (event) {
 });
 
 // --- SCROLL TO TOP LISTENERS ---
+if (debug) console.log(`[${getTimestamp()}] EVENT LISTENER: "click" event on "window"`);
 window.addEventListener('scroll', toggleScrollButton);
+if (debug) console.log(`[${getTimestamp()}] EVENT LISTENER: "click" event on "scrollButton"`);
 scrollButton.addEventListener('click', scrollToTop);
 
 // --- VIEW SWITCHING LISTENERS (Initial Setup) ---
 
 // Home button always exists, so attach its listener once
+if (debug) console.log(`[${getTimestamp()}] EVENT LISTENER: "click" event on "viewHomeLink"`);
 viewHomeLink.addEventListener('click', loadHomeView);
 
 // CRITICAL: On DOMContentLoaded, inject the modal HTML, set up listeners, and route the page
+if (debug) console.log(`[${getTimestamp()}] EVENT LISTENER: "DOMContentLoaded" event on "document"`);
 document.addEventListener('DOMContentLoaded', function () {
   injectModalContainer();
   setupModalListeners();
   routePage();
 });
-
+if (debug) console.log(`[${getTimestamp()}] EVENT LISTENER: "hashchange" event on "window"`);
 window.addEventListener('hashchange', routePage);

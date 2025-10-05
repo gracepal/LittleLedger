@@ -9,18 +9,21 @@
 </head>
 
 <body>
+    <!-- Outermost container -->
     <div class="container">
+        <!-- Top navbar -->
         <nav class="navbar">
+            <!-- Left side of navbar with hamburger icon to toggle navmenu, and homepage link -->
             <div class="left">
                 <button class="hamburger" id="menu-toggle">☰</button>
                 <button class="home" id="view-home-link">🏠 Little Ledger</button>
             </div>
-
+            <!-- Right side of navbar with avatar dropdown and user name -->
             <div class="right">
                 <div class="user-menu-container">
                     <button class="avatar" id="user-menu-toggle">🙂</button>
                     <button class="name">John Doe</button>
-
+                    <!-- User dropdown menu and links -->
                     <div class="dropdown-menu" id="user-dropdown">
                         <ul>
                             <li><a href="#">Account</a></li>
@@ -33,15 +36,19 @@
             </div>
         </nav>
 
+        <!-- Sidebar toggles open/close with navbar with both generic and page-specific content -->
         <div class="sidebar" id="sidebar-menu">
             <ul>
+                <li><a href="#" id="view-home-link">Home</a></li>
                 <li><a href="#" id="view-products-link">See Products</a></li>
                 <li><a href="#">Calendar</a></li>
                 <li><a href="#">Log Event</a></li>
             </ul>
         </div>
 
+        <!-- Main content wrapper -->
         <div class="main-content-wrapper" id="main-wrapper">
+            <!-- Main content loads with load function ins app.js for each page -->
             <main id="main-content">
                 <div id="home-template" style="display: none;">
                     <h1>Welcome to Little Ledger</h1>
@@ -57,12 +64,13 @@
                 </div>
             </main>
         </div>
-
+        <!-- Scroll to top bottom fixed to bottom left corner of page, visible always -->
         <button id="scrollToTopBtn" class="scroll-btn">
             &uarr;
         </button>
 
     </div>
+    <!-- Link data file to read and use instantly -->
     <script src="data.js"></script>
     <script src="app.js"></script>
 </body>
