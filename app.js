@@ -46,20 +46,46 @@ function loadHomeView(event) {
   window.scrollTo(0, 0);
 }
 
-// Function to generate the HTML for the placeholder products page
+// Generates the HTML string for the tag bubbles at the bottom of the card.
+function generateTagBubbles(tags) {
+  if (!tags || tags.length === 0) return '';
+
+  // Creates HTML like: <span class="tag">bath</span><span class="tag">skincare</span>
+  return tags.map((tag) => `<span class="tag">${tag}</span>`).join('');
+}
+
+// Generates the HTML string for a single product card.
+function generateProductCard(product) {
+  // Note: The photo path is relative to index.html
+  const imagePath = product.photo;
+
+  return `
+        <div class="product-card" data-id="${product.id}">
+            <div class="card-header">
+                ${product.description}
+            </div>
+            <div class="card-image-container">
+                <img src="${imagePath}" alt="${product.name}">
+            </div>
+            <div class="card-footer">
+                ${generateTagBubbles(product.tags)}
+            </div>
+        </div>
+    `;
+}
+
+// Generates the HTML for the full products page view.
 function getProductsPageHTML() {
-  // This is the placeholder for the product list page
+  // Map the products array to an array of card HTML strings
+  const productCardsHTML = products.map(generateProductCard).join('');
+
+  // Wrap the cards in a grid container
   return `
         <div class="products-page">
-            <h2>All Products</h2>
-            <p>Welcome to the products catalog! This is the placeholder for displaying ${products.length} items.</p>
-            <div class="product-list-placeholder" style="height: 100vh; background-color: #f0f0f0; padding: 20px; border-radius: 5px;">
-                <p>Product Grid will go here.</p>
-                <p>This content is long enough to ensure scrolling works.</p>
-                <p>More content...</p>
-                <p>Even more content...</p>
-                <p>Scroll down to test the button!</p>
-                <p style="height: 500px;">Placeholder Space</p>
+            <h2>All Products (${products.length} Items)</h2>
+
+            <div class="product-grid">
+                ${productCardsHTML}
             </div>
         </div>
     `;

@@ -17,6 +17,15 @@ body {
   overflow-x: hidden; /* Prevents horizontal scrolling during the sidebar shift */
 }
 
+/* --- BUTTON STYLES --- */
+
+button {
+  background: none;
+  border: 1px solid #888;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
 /* --- NAVBAR & DROPDOWN STYLES --- */
 
 .navbar {
@@ -93,16 +102,6 @@ body {
     height: 1px;
     background-color: #eee;
     margin: 5px 0;
-}
-
-
-/* --- BUTTON STYLES --- */
-
-button {
-  background: none;
-  border: 1px solid #888;
-  padding: 6px 10px;
-  cursor: pointer;
 }
 
 
@@ -210,4 +209,103 @@ main {
 
 .scroll-btn:hover {
     background-color: #555;
+}
+
+.products-page {
+    /* Optional: Add some top margin/padding below the H2 */
+    padding: 0 10px;
+}
+
+/* 1. GRID CONTAINER */
+.product-grid {
+    display: grid;
+    /* Responsive Grid: Adjust the number of columns based on screen size */
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 20px; /* Space between cards */
+    padding: 20px 0;
+}
+
+/* 2. INDIVIDUAL PRODUCT CARD */
+.product-card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+
+    /* Enforce TALLER-THAN-WIDE aspect ratio using padding hack */
+    padding-bottom: 120%; /* Sets height relative to width (100% width + 20% extra height) */
+    position: relative;
+}
+
+/* Content wrapper inside the card to handle absolute positioning */
+.product-card > * {
+    position: absolute;
+    width: 100%;
+    left: 0;
+    padding: 8px;
+}
+
+/* 3. CARD SECTIONS */
+
+.card-header {
+    /* Top section: Description */
+    top: 0;
+    height: 15%; /* Takes up 15% of the card height */
+    font-size: 0.9em;
+    font-weight: bold;
+    color: #333;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-bottom: 1px solid #eee;
+    box-sizing: border-box;
+}
+
+.card-image-container {
+    /* Middle section: Image */
+    top: 15%; /* Starts after the header */
+    height: 70%; /* Takes up the majority of the height */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+    box-sizing: border-box;
+}
+
+.card-image-container img {
+    /* Maximize image size within its container */
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain; /* Ensures the whole image is visible without cropping */
+}
+
+.card-footer {
+    /* Bottom section: Tags */
+    bottom: 0;
+    height: 15%; /* Takes up 15% of the card height */
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: center;
+    gap: 5px;
+    background-color: #f7f7f7;
+    border-top: 1px solid #eee;
+    box-sizing: border-box;
+}
+
+/* 4. TAG BUBBLES */
+.tag {
+    background-color: #e0e7ff; /* Light blue/purple */
+    color: #4338ca; /* Darker text */
+    font-size: 0.7em;
+    padding: 2px 6px;
+    border-radius: 4px;
+    white-space: nowrap; /* Prevent tags from breaking */
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
