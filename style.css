@@ -144,6 +144,8 @@ main {
   left: 0;
   width: 250px;
   height: calc(100% - 50px);
+  overflow-y: auto; /* CRITICAL: Enables scrolling for the entire sidebar content */
+
   background-color: #fff;
 
   transform: translateX(-100%);
@@ -313,8 +315,48 @@ main {
 .result-summary {
     padding-top: 5px;
     font-size: 0.9em;
-    font-weight: bold;
-    color: #4a5568; /* Slightly darker text for visibility */
+    color: #4a5568;
+    text-align: left;
+}
+
+#product-result-count {
+    display: block; /* Makes it take up its own line */
+    font-weight: bold; /* Keep the count bold */
+    text-align: center; /* Center the count itself */
+    margin-bottom: 5px;
+}
+
+.product-summary-list {
+    list-style: none;
+    padding: 0;
+    margin: 10px 0 0 0;
+    max-height: 250px;
+    overflow-y: auto;
+    border-top: 1px solid #f0f0f0;
+    padding-top: 10px;
+}
+
+.product-summary-item {
+    font-size: 0.8em;
+    color: #555;
+    padding: 3px 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border-bottom: 1px dotted #f0f0f0;
+
+    font-weight: normal;
+    text-align: left;
+}
+
+.product-summary-item:last-child {
+    border-bottom: none;
+}
+
+.no-results {
+    font-size: 0.8em;
+    color: #999;
+    padding-top: 10px;
     text-align: center;
 }
 

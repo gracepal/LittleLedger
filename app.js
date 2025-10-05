@@ -48,11 +48,11 @@ function attachSidebarListeners() {
  */
 
 // Define the HTML for the product-specific controls
-// Define the HTML for the product-specific controls
 function getProductsSidebarControlsHTML() {
   // NOTE: We assume 'products' is a global array from data.js
   const productCount = products.length;
 
+  // This function now correctly includes ALL sidebar controls
   return `
         <hr class="sidebar-separator">
 
@@ -108,9 +108,35 @@ function getProductsSidebarControlsHTML() {
             <hr class="sidebar-separator faint">
             <div class="result-summary">
                 <span id="product-result-count">Showing ${productCount} products</span>
+
+                ${generateProductSummaryList(products)}
             </div>
-            </div>
+
+        </div>
     `;
+}
+
+/**
+ * Generates the HTML list of product names for the sidebar summary.
+ * @param {Array<Object>} productsArray - The array of products currently in view.
+ * @returns {string} The HTML string for the list.
+ */
+function generateProductSummaryList(productsArray) {
+  if (!productsArray || productsArray.length === 0) {
+    return '<p class="no-results">No products match your current filters.</p>';
+  }
+
+  // Create a list of the product names
+  const listItems = productsArray
+    .map(
+      (product) =>
+        `<li class="product-summary-item" data-id="${product.id}">
+            ${product.name.substring(0, 35)}...
+        </li>`
+    )
+    .join('');
+
+  return `<ul class="product-summary-list">${listItems}</ul>`;
 }
 
 /**************************************************************
