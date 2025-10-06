@@ -1,5 +1,18 @@
 // app.js
 
+/**
+ * 🚀 LAUNCH CODE 🚀
+ * (1) Values, Data Types, and Operations
+ * --------------------------------------
+ * We use "let" for variables that can be reassigned, and
+ * "const" for variables that cannot and should not be assigned.
+ *
+ * Below are examples of assigning a boolean data type to a let variable (ex. line 16),
+ * and HTMLElements object data types to const and let variables (ex. liness 32, 34).
+ *
+ * Below also is one example of multiplication operation (ex. line 26).
+ */
+
 let debug = true; // set false to reduce noise or to print specific content
 
 // --- ELEMENT SELECTION ---
@@ -10,7 +23,7 @@ const homeTemplate = document.getElementById('home-template');
 const menuToggleButton = document.getElementById('menu-toggle');
 const userMenuToggleButton = document.getElementById('user-menu-toggle');
 const scrollButton = document.getElementById('scrollToTopBtn');
-const SCROLL_THRESHOLD = 300;
+const SCROLL_THRESHOLD = window.innerHeight * 0.01;
 // Sidebar
 const sidebarMenu = document.getElementById('sidebar-menu');
 const viewHomeLink = document.getElementById('view-home-link');
@@ -49,11 +62,26 @@ function closeModal() {
 
 // Open and populate the product details modal
 function openModal(productId) {
+  /**
+   * 🚀 LAUNCH CODE 🚀
+   * (2) Stringing Characters Together
+   * ---------------------------------
+   * Below is an example of a template literal, where I pass in two types,
+   * one is a function to "getTimestamp()"", and another is a string "productId"
+   * (ex. line 73).
+   */
   if (debug) console.log(`[${getTimestamp()}] FUNCTION: openModal(productId=${productId})`);
   // Target product object using product ID
   const idToFind = parseInt(productId, 10);
   const product = products.find((p) => p.id === idToFind);
   // Print error if product ID not found
+  /**
+   * 🚀 LAUNCH CODE 🚀
+   * (3) Control Structures and Logic
+   * --------------------------------
+   * Below is an example of a control logic, where print a message in the console
+   * if we fail to find a product with a product ID (ex. lines 85-88).
+   */
   if (!product) {
     console.error('Product not found for ID:', productId);
     return;
@@ -261,6 +289,13 @@ function generateProductSummaryList(productsArray) {
   if (!productsArray || productsArray.length === 0) {
     return '<p class="no-results">No products match your current filters.</p>';
   }
+  /**
+   * 🚀 LAUNCH CODE 🚀
+   * (4) Building Arrays
+   * -------------------
+   * Below is an example of building an array using the .map() function, to build
+   * a new array based on the elements of an existing one (ex. lines 300-306).
+   */
   // Create a list of the product names up to 35 characters, then ellipses if longer
   const listItems = productsArray
     .map(
@@ -279,6 +314,17 @@ function generateTagBubbles(tags) {
   if (debug) console.log(`[${getTimestamp()}] FUNCTION: generateTagBubbles(tags=`, tags, `)`);
   // Return empty string is tags is falsey, or it is empty
   if (!tags || tags.length === 0) return '';
+  /**
+   * 🚀 LAUNCH CODE 🚀
+   * (5) Using Arrays
+   * ----------------
+   * Similar to the previous example, the .map() function also applies to
+   * "Using Arrays". It is part of the "array iterator methods", in addition to
+   * .forEach(), .filter(), and .reduce().
+   *
+   * In below example, we take in the tag, and enclose it within a span tag with
+   * the class "tag" (ex. line 329).
+   */
   // Otherwise create span tags with each tag
   return tags.map((tag) => `<span class="tag">${tag}</span>`).join('');
 }
@@ -286,6 +332,15 @@ function generateTagBubbles(tags) {
 // Generate HTML string for a single product card
 function generateProductCard(product) {
   if (debug) console.log(`[${getTimestamp()}] FUNCTION: generateProductCard(product=`, product, `)`);
+  /**
+   * 🚀 LAUNCH CODE 🚀
+   * (6) Creating and Using Objects
+   * ------------------------------
+   * Below is an example of using/accessing data from the object created in the
+   * data.js file (containing an array of objects, each object representing a product).
+   * We access object values using dot notation, to populate our modal with the specific
+   * data related to the product card we clicked (ex. lines 344, 351, 353, 356, 359).
+   */
   const imagePath = product.photo;
   // Create product card with "data-id" to identify product
   // Populate remainder of card with product-specific details
